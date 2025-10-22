@@ -47,5 +47,5 @@ export const Index = () => {
                 </OffCanvas>
             </div>
         </>
-    )
-}
+    );
+};
