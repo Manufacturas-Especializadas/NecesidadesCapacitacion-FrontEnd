@@ -8,4 +8,6 @@ export interface TrainingNeed {
     expectedPerformance: string;
     registrationDate: string
     priority: number;
+    category: number;
+    providerUser: string;
 }
