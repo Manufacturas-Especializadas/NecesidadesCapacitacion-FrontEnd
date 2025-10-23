@@ -5,10 +5,9 @@ import type { UserTrainingSummary } from "../../interfaces/UserTrainingSummary";
 import { UserTrainingDetailsModal } from "../../components/UserTrainingDetailsModal/UserTrainingDetailsModal";
 import { trainingNeedService } from "../../api/services/TrainingNeedService";
 import { Table } from "../../components/Table/Table";
-// 1. Importamos los íconos necesarios
 import { BiArrowBack, BiLoaderAlt, BiErrorCircle, BiDownload } from "react-icons/bi";
+import Swal from "sweetalert2";
 
-// Definimos las columnas fuera del componente
 const columns = [
     {
         name: "Nombre del solicitante",
@@ -56,11 +55,36 @@ export const IndexAdmin = () => {
         setSelectedUser(null);
     };
 
-    const handleExportExcel = () => {
-        console.log("Iniciando descarga de Excel con datos:", users);
-        // Aquí iría la lógica para exportar los 'users' a un archivo Excel
-        // (usualmente con una librería como 'xlsx' o 'react-csv')
-        alert("Función de 'Descargar Excel' no implementada.");
+    const handleExportExcel = async () => {
+        Swal.fire({
+            title: "Generando archivo...",
+            text: "Por favor espera mientras se prepara tu archivo excel",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            didOpen: () => {
+                Swal.showLoading();
+            }
+        });
+
+        try {
+            await trainingNeedService.downloadExcel();
+            Swal.close();
+
+            await Swal.fire({
+                icon: "success",
+                title: "¡Descarga completada!",
+                text: "El archivo excel se ha descargado correctamente",
+                timer: 2500,
+                showConfirmButton: false,
+            });
+        } catch (error: any) {
+            Swal.close();
+            await Swal.fire({
+                icon: "error",
+                title: "Error al descargar",
+                text: error.message || "Ocurrio un problema al generar el archiv. Inténtalo de nuevo"
+            });
+        }
     };
 
     const renderContent = () => {

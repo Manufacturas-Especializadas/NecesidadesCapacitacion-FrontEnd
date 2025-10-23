@@ -18,6 +18,7 @@ export const API_CONFIG = {
             categorys: "/api/TrainingNeed/GetCategory",
             trainingNeeds: "/api/TrainingNeed/GetTrainingNeeds",
             trainingNeedsByUser: "/api/TrainingNeed/GetTrainingNeedsByUser",
+            downloadExcel: "/api/TrainingNeed/DownloadExcel",
             create: "/api/TrainingNeed/Create",
             delete: "/api/TrainingNeed/Delete/"
         }

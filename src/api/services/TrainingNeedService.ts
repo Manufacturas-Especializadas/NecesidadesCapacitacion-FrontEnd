@@ -32,6 +32,7 @@ class TrainingNeedService {
     private categoryEndpoint = API_CONFIG.endpoints.training.categorys;
     private trainingNeedsEndpoint = API_CONFIG.endpoints.training.trainingNeeds;
     private trainingNeedsByUser = API_CONFIG.endpoints.training.trainingNeedsByUser;
+    private downloadExcelEndpoint = API_CONFIG.endpoints.training.downloadExcel;
     private createEndpoint = API_CONFIG.endpoints.training.create;
     private deleteEndpoint = API_CONFIG.endpoints.training.delete;
 
@@ -49,6 +50,10 @@ class TrainingNeedService {
 
     async getTrainingNeeds(): Promise<TrainingNeed[]> {
         return apiClient.get<TrainingNeed[]>(this.trainingNeedsEndpoint);
+    };
+
+    async downloadExcel(): Promise<void> {
+        await apiClient.downloadFile(this.downloadExcelEndpoint, "necesidades_capacitacion.xlsx");
     };
 
     async deleteTrainingNeed(id: number | string): Promise<TrainigNeedResponse> {

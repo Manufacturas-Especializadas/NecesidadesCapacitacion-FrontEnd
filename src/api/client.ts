@@ -73,6 +73,45 @@ class ApiClient {
     delete<T>(endpoint: string): Promise<T> {
         return this.request<T>(endpoint, { method: 'DELETE' });
     };
+
+    downloadFile(endpoint: string, filename: string): Promise<void> {
+        const url = `${this.baseUrl}${endpoint}`;
+        const authHeaders = this.getAuthHeaders();
+
+        const headers = new Headers({
+            ...authHeaders,
+        });
+
+        return fetch(url, {
+            method: 'GET',
+            headers,
+        })
+            .then(response => {
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        localStorage.removeItem("token");
+                        localStorage.removeItem("refreshToken");
+                        window.location.href = '/login';
+                        return Promise.reject(new Error('Unauthorized'));
+                    }
+                    return response.json().catch(() => ({ message: `Error HTTP: ${response.status}` }))
+                        .then(errorData => {
+                            throw new Error(errorData.message || `Error HTTP: ${response.status}`);
+                        });
+                }
+                return response.blob();
+            })
+            .then(blob => {
+                const downloadUrl = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = downloadUrl;
+                link.download = filename;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                window.URL.revokeObjectURL(downloadUrl);
+            });
+    };
 }
 
 export const apiClient = new ApiClient();
