@@ -1,101 +1,131 @@
 import type { TrainingNeedDetails } from "../../interfaces/TrainingNeedDetails";
-import type { UserTrainingSummary } from "../../interfaces/UserTrainingSummary"
+import type { UserTrainingSummary } from "../../interfaces/UserTrainingSummary";
 import { Button } from "../Button/Button";
 import { Table } from "../Table/Table";
+import { Avatar } from "../Avatar/Avatar";
+import { BiX } from "react-icons/bi";
+
+const PriorityBadge = ({ priority }: { priority: string }) => {
+    let classes = "";
+    switch (priority) {
+        case "MUY URGENTE":
+            classes = "bg-red-100 text-red-800 border-red-200";
+            break;
+        case "URGENTE":
+            classes = "bg-yellow-100 text-yellow-800 border-yellow-200";
+            break;
+        case "POCO URGENTE":
+            classes = "bg-green-100 text-green-800 border-green-200";
+            break;
+        default:
+            classes = "bg-gray-100 text-gray-800 border-gray-200";
+    }
+    return (
+        <span className={`px-2.5 py-0.5 rounded-full text-xs font-medium border ${classes}`}>
+            {priority}
+        </span>
+    );
+};
+
+
+const modalColumns = [
+    {
+        name: "Necesidad actual",
+        selector: (row: TrainingNeedDetails) => row.presentNeed,
+        wrap: true,
+    },
+    {
+        name: "Curso sugerido",
+        selector: (row: TrainingNeedDetails) => row.suggestedTrainingCourse,
+        wrap: true,
+    },
+    {
+        name: "Prioridad",
+        cell: (row: TrainingNeedDetails) => <PriorityBadge priority={row.priorirty} />,
+    },
+    {
+        name: "Fecha",
+        selector: (row: TrainingNeedDetails) =>
+            new Date(row.registrationDate).toLocaleDateString("es-ES", {
+                day: "2-digit",
+                month: "2-digit",
+                year: "numeric",
+            }),
+        width: "180px",
+    },
+];
+
 
 interface Props {
-    user: UserTrainingSummary;
+    user: UserTrainingSummary | null;
     isOpen: boolean;
     onClose: () => void;
 };
 
 export const UserTrainingDetailsModal = ({ user, isOpen, onClose }: Props) => {
-    if (!isOpen) return null;
+    if (!isOpen || !user) return null;
 
     return (
         <>
             <div
-                className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
-                    }`}
-                onClick={(e) => {
-                    if (e.target === e.currentTarget) {
-                        onClose();
-                    }
-                }}
+                className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
             >
-                <div className="absolute inset-0 bg-black/50"></div>
                 <div
-                    className={`relative bg-white rounded-lg shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col transform transition-all duration-300 ease-out ${isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
+                    className="absolute inset-0 bg-black/60 backdrop-blur-sm"
+                    onClick={onClose}
+                ></div>
+
+                <div
+                    role="dialog"
+                    aria-modal="true"
+                    aria-labelledby="modal-title"
+                    className={`relative bg-white rounded-xl shadow-xl max-w-4xl w-full max-h-[90vh] overflow-hidden flex flex-col transform transition-all duration-300 ease-out ${isOpen ? "scale-100 opacity-100" : "scale-95 opacity-0"
                         }`}
                 >
-                    <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center">
-                        <h2 className="text-xl font-bold text-gray-800">
-                            Capacitaciones solicitadas de <span className="text-blue-600">{user.userName}</span>
-                        </h2>
-                        <Button variant="secondary" size="sm" onClick={onClose}>
-                            &times;
-                        </Button>
+                    <div className="px-6 py-4 border-b border-gray-200 flex justify-between items-center flex-shrink-0">
+                        <div className="flex items-center gap-3">
+                            <Avatar name={user.userName} />
+                            <h2 id="modal-title" className="text-xl font-bold text-gray-800">
+                                Capacitaciones de <span className="text-blue-600">{user.userName}</span>
+                            </h2>
+                        </div>
+                        <button
+                            onClick={onClose}
+                            className="p-1 rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            aria-label="Cerrar modal"
+                        >
+                            <BiX className="w-6 h-6" />
+                        </button>
                     </div>
 
                     <div className="overflow-y-auto p-6 flex-1">
-                        <div className="grid grid-cols-1 md:grid-cols-3 mb-6 text-sm">
-                            <div><strong>Nómina: </strong>{user.payRollNumber}</div>
-                            <div><strong>Total de registros: </strong>{user.totalNeeds}</div>
-                        </div>
+                        <dl className="mb-6 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-4 rounded-lg border border-gray-200 bg-gray-50 p-4">
+                            <div className="sm:col-span-1">
+                                <dt className="text-sm font-medium text-gray-500">Nómina</dt>
+                                <dd className="mt-1 text-base font-semibold text-gray-900">{user.payRollNumber}</dd>
+                            </div>
+                            <div className="sm:col-span-1">
+                                <dt className="text-sm font-medium text-gray-500">Total de Registros</dt>
+                                <dd className="mt-1 text-base font-semibold text-gray-900">{user.totalNeeds}</dd>
+                            </div>
+                        </dl>
 
                         <h3 className="font-semibold text-lg mb-3 text-gray-700">
-                            Lista de necesidades de capacitación
+                            Lista de necesidades
                         </h3>
 
-                        <Table
-                            columns={[
-                                {
-                                    name: "Necesidad actual",
-                                    selector: (row: TrainingNeedDetails) => row.presentNeed,
-                                    wrap: true,
-                                },
-                                {
-                                    name: "Curso sugerido",
-                                    selector: (row: TrainingNeedDetails) => row.suggestedTrainingCourse,
-                                    wrap: true,
-                                },
-                                {
-                                    name: "Prioridad",
-                                    selector: (row: TrainingNeedDetails) => row.priorirty,
-                                    conditionalCellStyles: [
-                                        {
-                                            when: (row: TrainingNeedDetails) => row.priorirty === "MUY URGENTE",
-                                            style: { color: "#e53e3e", fontWeight: "bold" },
-                                        },
-                                        {
-                                            when: (row: TrainingNeedDetails) => row.priorirty === "URGENTE",
-                                            style: { color: "#dd6b20" },
-                                        },
-                                        {
-                                            when: (row: TrainingNeedDetails) => row.priorirty === "POCO URGENTE",
-                                            style: { color: "#38a169" },
-                                        },
-                                    ],
-                                },
-                                {
-                                    name: "Fecha",
-                                    selector: (row: TrainingNeedDetails) =>
-                                        new Date(row.registrationDate).toLocaleDateString("es-ES", {
-                                            day: "2-digit",
-                                            month: "2-digit",
-                                            year: "numeric",
-                                        }),
-                                    width: "180px",
-                                },
-                            ]}
-                            data={user.trainingNeeds}
-                            loading={false}
-                            pagination={user.trainingNeeds.length > 5}
-                            title=""
-                        />
+                        <div className="overflow-x-auto rounded-lg border border-gray-200">
+                            <Table
+                                columns={modalColumns}
+                                data={user.trainingNeeds}
+                                loading={false}
+                                pagination={user.trainingNeeds.length > 5}
+                                title=""
+                            />
+                        </div>
                     </div>
 
-                    <div className="px-6 py-4 border-t border-gray-200 flex justify-end">
+                    <div className="px-6 py-4 border-t border-gray-200 flex justify-end flex-shrink-0 bg-gray-50">
                         <Button onClick={onClose} variant="secondary" size="sm">
                             Cerrar
                         </Button>
@@ -103,5 +133,5 @@ export const UserTrainingDetailsModal = ({ user, isOpen, onClose }: Props) => {
                 </div>
             </div>
         </>
-    )
-}
+    );
+};
