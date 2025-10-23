@@ -11,6 +11,8 @@ interface Props {
         expectedPerformance: string;
         registrationDate: string
         priority: number;
+        category: number;
+        providerUser: string;
     };
 };
 
@@ -38,6 +40,12 @@ export const TableRow = ({ item }: Props) => {
                 </td>
                 <td className="px-4 py-3 text-center whitespace-nowrap">
                     <PriorityBadge priority={item.priority} />
+                </td>
+                <td className="px-4 py-3 text-sm text-gray-700 max-w-xs break-words">
+                    {item.category}
+                </td>
+                <td className="px-4 py-3 text-sm text-gray-700 max-w-xs break-words">
+                    {item.providerUser}
                 </td>
             </tr>
         </>
