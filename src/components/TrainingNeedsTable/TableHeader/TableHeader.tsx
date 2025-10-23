@@ -39,6 +39,20 @@ export const TableHeader = () => {
                     >
                         Prioridad
                     </th>
+
+                    <th
+                        scope="col"
+                        className="px-4 py-3 text-xs md:text-sm font-semibold text-left tracking-wide"
+                    >
+                        Categoría
+                    </th>
+
+                    <th
+                        scope="col"
+                        className="px-4 py-3 text-xs md:text-sm font-semibold text-left tracking-wide"
+                    >
+                        Sugerencia de proveedor
+                    </th>
                 </tr>
             </thead>
         </>

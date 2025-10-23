@@ -6,6 +6,7 @@ import { trainingNeedService, type TrainingNeedFormData } from "../../api/servic
 import Swal from "sweetalert2";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import type { Category } from "../../interfaces/Category";
 
 interface Props {
     onSuccess?: () => void;
@@ -20,10 +21,15 @@ export const FormTrainingNeeds = ({ onSuccess }: Props) => {
         qualityObjective: '',
         currentPerformance: '',
         expectedPerformance: '',
+        providerUser: '',
+        providerAdmin1: '',
+        providerAdmin2: '',
         registrationDate: new Date().toISOString().split('T')[0],
         priorityId: 1,
+        categoryId: 0,
     });
     const [priority, setPriority] = useState<Prioritys[]>([]);
+    const [category, setCategory] = useState<Category[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -36,6 +42,18 @@ export const FormTrainingNeeds = ({ onSuccess }: Props) => {
             }
         };
         loadPriority();
+    }, []);
+
+    useEffect(() => {
+        const loadCategory = async () => {
+            try {
+                const data = await trainingNeedService.getCategory()
+                setCategory(data);
+            } catch (error: any) {
+                console.error("Error al cargar las categorias");
+            }
+        };
+        loadCategory();
     }, []);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
@@ -98,9 +116,13 @@ export const FormTrainingNeeds = ({ onSuccess }: Props) => {
                     suggestedTrainingCourse: '',
                     qualityObjective: '',
                     currentPerformance: '',
+                    providerUser: '',
+                    providerAdmin1: '',
+                    providerAdmin2: '',
                     expectedPerformance: '',
                     registrationDate: new Date().toISOString().split('T')[0],
                     priorityId: 1,
+                    categoryId: 0
                 });
 
                 Swal.fire({
@@ -146,6 +168,11 @@ export const FormTrainingNeeds = ({ onSuccess }: Props) => {
     const priorityOptions = priority.map((priority) => ({
         value: priority.id.toString(),
         label: priority.name
+    }));
+
+    const categoryOptions = category.map((category) => ({
+        value: category.id.toString(),
+        label: category.name
     }));
 
     return (
@@ -214,6 +241,22 @@ export const FormTrainingNeeds = ({ onSuccess }: Props) => {
                     label="Prioridad"
                     name="priorityId"
                     options={priorityOptions}
+                    onChange={handleChange}
+                />
+
+                <FormInput
+                    type="select"
+                    label="Selecciona una categoría"
+                    name="categoryId"
+                    options={categoryOptions}
+                    onChange={handleChange}
+                />
+
+                <FormInput
+                    type="text"
+                    label="Propuesta de proveedor"
+                    name="providerUser"
+                    value={formData.providerUser}
                     onChange={handleChange}
                 />
 
