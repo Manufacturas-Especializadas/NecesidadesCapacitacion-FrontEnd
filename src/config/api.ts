@@ -15,6 +15,7 @@ export const API_CONFIG = {
         },
         training: {
             prioritys: "/api/TrainingNeed/GetPriority",
+            categorys: "/api/TrainingNeed/GetCategory",
             trainingNeeds: "/api/TrainingNeed/GetTrainingNeeds",
             trainingNeedsByUser: "/api/TrainingNeed/GetTrainingNeedsByUser",
             create: "/api/TrainingNeed/Create",
