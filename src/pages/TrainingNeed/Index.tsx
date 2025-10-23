@@ -2,12 +2,14 @@ import { useState } from "react";
 import { Button } from "../../components/Button/Button";
 import { OffCanvas } from "../../components/OffCanvas/OffCanvas";
 import { FormTrainingNeeds } from "../../components/FormTrainingNeeds/FormTrainingNeeds";
-import { BiPlus } from "react-icons/bi";
+import { BiCog, BiPlus } from "react-icons/bi";
 import { TrainingNeedsTable } from "../../components/TrainingNeedsTable/TrainingNeedsTable";
+import { useNavigate } from "react-router-dom";
 
 export const Index = () => {
     const [isOffCanvasOpen, setIsOffCanvas] = useState(false);
     const [tableKey, setTableKey] = useState(0);
+    const navigate = useNavigate();
 
     const handleOpenOffCanvas = () => setIsOffCanvas(true);
     const handleCloseOffCanvas = () => setIsOffCanvas(false);
@@ -31,15 +33,27 @@ export const Index = () => {
                                 Gestiona y visualiza las necesidades de capacitación del equipo
                             </p>
                         </div>
-                        <Button
-                            variant="primary"
-                            size="sm"
-                            onClick={handleOpenOffCanvas}
-                            className="flex items-center justify-center gap-2"
-                        >
-                            <BiPlus />
-                            <span>Nueva necesidad</span>
-                        </Button>
+
+                        <div className="flex flex-col sm:flex-row sm:items-center gap-3">
+                            <Button
+                                variant="secondary"
+                                size="sm"
+                                className="flex items-center justify-center gap-2"
+                                onClick={() => navigate("/administrador")}
+                            >
+                                <BiCog />
+                                <span>Administrador</span>
+                            </Button>
+                            <Button
+                                variant="primary"
+                                size="sm"
+                                onClick={handleOpenOffCanvas}
+                                className="flex items-center justify-center gap-2"
+                            >
+                                <BiPlus />
+                                <span>Nueva necesidad</span>
+                            </Button>
+                        </div>
                     </div>
 
                     <div className="w-full">
