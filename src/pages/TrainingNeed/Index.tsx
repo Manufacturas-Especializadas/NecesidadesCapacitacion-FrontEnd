@@ -5,6 +5,7 @@ import { FormTrainingNeeds } from "../../components/FormTrainingNeeds/FormTraini
 import { BiCog, BiPlus } from "react-icons/bi";
 import { TrainingNeedsTable } from "../../components/TrainingNeedsTable/TrainingNeedsTable";
 import { useNavigate } from "react-router-dom";
+import { RoleGuard } from "../../components/RoleGuard/RoleGuard";
 
 export const Index = () => {
     const [isOffCanvasOpen, setIsOffCanvas] = useState(false);
@@ -35,15 +36,17 @@ export const Index = () => {
                         </div>
 
                         <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-                            <Button
-                                variant="secondary"
-                                size="sm"
-                                className="flex items-center justify-center gap-2"
-                                onClick={() => navigate("/administrador")}
-                            >
-                                <BiCog />
-                                <span>Administrador</span>
-                            </Button>
+                            <RoleGuard allowedRoles={["Admin"]}>
+                                <Button
+                                    variant="secondary"
+                                    size="sm"
+                                    className="flex items-center justify-center gap-2"
+                                    onClick={() => navigate("/administrador")}
+                                >
+                                    <BiCog />
+                                    <span>Administrador</span>
+                                </Button>
+                            </RoleGuard>
                             <Button
                                 variant="primary"
                                 size="sm"
