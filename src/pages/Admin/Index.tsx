@@ -7,6 +7,7 @@ import { trainingNeedService } from "../../api/services/TrainingNeedService";
 import { Table } from "../../components/Table/Table";
 import { BiArrowBack, BiLoaderAlt, BiErrorCircle, BiDownload } from "react-icons/bi";
 import Swal from "sweetalert2";
+import type { TrainingNeedDetails } from "../../interfaces/TrainingNeedDetails";
 
 const columns = [
     {
@@ -19,11 +20,15 @@ const columns = [
     }
 ];
 
+interface UserWithNeeds extends UserTrainingSummary {
+    trainingNeeds: TrainingNeedDetails[];
+}
+
 export const IndexAdmin = () => {
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
     const [users, setUsers] = useState<UserTrainingSummary[]>([]);
-    const [selectedUser, setSelectedUser] = useState<UserTrainingSummary | null>(null);
+    const [selectedUser, setSelectedUser] = useState<UserWithNeeds | null>(null);
     const [actionLoading, setActionLoading] = useState<number | null>(null);
 
     const navigate = useNavigate();

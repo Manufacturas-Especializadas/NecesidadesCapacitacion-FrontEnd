@@ -10,9 +10,10 @@ import type { Category } from "../../interfaces/Category";
 
 interface Props {
     onSuccess?: () => void;
+    trainingNeedId?: number;
 };
 
-export const FormTrainingNeeds = ({ onSuccess }: Props) => {
+export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
     const { user, isAuthenticated } = useAuth();
     const [formData, setFormData] = useState<TrainingNeedFormData>({
         presentNeed: '',
@@ -31,6 +32,36 @@ export const FormTrainingNeeds = ({ onSuccess }: Props) => {
     const [priority, setPriority] = useState<Prioritys[]>([]);
     const [category, setCategory] = useState<Category[]>([]);
     const navigate = useNavigate();
+
+    useEffect(() => {
+        if (trainingNeedId) {
+            const loadTrainingNeed = async () => {
+                try {
+                    const data = await trainingNeedService.getTrainingNeedsById(trainingNeedId);
+                    setFormData({
+                        presentNeed: data?.presentNeed || '',
+                        positionsOrCollaborator: data?.positionsOrCollaborator || '',
+                        suggestedTrainingCourse: data?.suggestedTrainingCourse || '',
+                        qualityObjective: data?.qualityObjective || '',
+                        currentPerformance: data?.currentPerformance || '',
+                        expectedPerformance: data?.expectedPerformance || '',
+                        providerUser: data?.providerUser || '',
+                        providerAdmin1: data?.providerAdmin1 || '',
+                        providerAdmin2: data?.providerAdmin2 || '',
+                        registrationDate: data?.registrationDate
+                            ? new Date(data.registrationDate).toISOString().split('T')[0]
+                            : new Date().toISOString().split('T')[0],
+                        priorityId: data?.priorityId || 1,
+                        categoryId: data?.categoryId || 0,
+                    });
+                } catch (error: any) {
+                    console.error("Error al cargar la necesidad de capacitación", error);
+                    Swal.fire("Error", "No se pudo cargar el registro", "error");
+                }
+            };
+            loadTrainingNeed();
+        }
+    }, [trainingNeedId]);
 
     useEffect(() => {
         const loadPriority = async () => {
@@ -65,39 +96,41 @@ export const FormTrainingNeeds = ({ onSuccess }: Props) => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (!isAuthenticated || !user) {
-            Swal.fire({
-                title: "Sesión expirada",
-                text: "Por favor, inicia sesión nuevamente",
-                icon: "warning",
-                confirmButtonText: "Ir a login"
-            }).then(() => {
-                navigate("/login");
-            });
-        }
+        // if (!isAuthenticated || !user) {
+        //     Swal.fire({
+        //         title: "Sesión expirada",
+        //         text: "Por favor, inicia sesión nuevamente",
+        //         icon: "warning",
+        //         confirmButtonText: "Ir a login"
+        //     }).then(() => {
+        //         navigate("/login");
+        //     });
+        //     return;
+        // }
 
         if (
-            !formData.currentPerformance || !formData.expectedPerformance || !formData.presentNeed ||
-            !formData.qualityObjective || !formData.suggestedTrainingCourse || formData.priorityId === null
+            !formData.currentPerformance ||
+            !formData.expectedPerformance ||
+            !formData.presentNeed ||
+            !formData.qualityObjective ||
+            !formData.suggestedTrainingCourse ||
+            formData.priorityId === null
         ) {
             Swal.fire({
                 title: "Error",
-                text: "No puedes guardar campos vacios",
+                text: "No puedes guardar campos vacíos",
                 icon: "error"
             });
-
             return;
         }
 
         try {
             Swal.fire({
-                title: "Enviando registro...",
+                title: "Enviando...",
                 text: "Por favor, espere mientras se procesa su solicitud",
                 allowOutsideClick: false,
                 allowEscapeKey: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                },
+                didOpen: () => Swal.showLoading(),
                 customClass: {
                     popup: 'bg-white rounded-lg shadow-xl',
                     title: 'text-xl font-bold text-gray-800',
@@ -105,39 +138,47 @@ export const FormTrainingNeeds = ({ onSuccess }: Props) => {
                 },
             });
 
-            const response = await trainingNeedService.createTrainingNeed(formData);
+            let response;
 
-            await Swal.close();
+            if (trainingNeedId) {
+                response = await trainingNeedService.updateTrainingNeed(trainingNeedId, formData);
+            } else {
+                const { providerAdmin1, providerAdmin2, ...dataForCreation } = formData;
+                response = await trainingNeedService.createTrainingNeed(dataForCreation);
+            }
+
+            Swal.close();
 
             if (response.success) {
-                setFormData({
-                    presentNeed: '',
-                    positionsOrCollaborator: '',
-                    suggestedTrainingCourse: '',
-                    qualityObjective: '',
-                    currentPerformance: '',
-                    providerUser: '',
-                    providerAdmin1: '',
-                    providerAdmin2: '',
-                    expectedPerformance: '',
-                    registrationDate: new Date().toISOString().split('T')[0],
-                    priorityId: 1,
-                    categoryId: 0
-                });
+                if (!trainingNeedId) {
+                    setFormData({
+                        presentNeed: '',
+                        positionsOrCollaborator: '',
+                        suggestedTrainingCourse: '',
+                        qualityObjective: '',
+                        currentPerformance: '',
+                        expectedPerformance: '',
+                        providerUser: '',
+                        providerAdmin1: '',
+                        providerAdmin2: '',
+                        registrationDate: new Date().toISOString().split('T')[0],
+                        priorityId: 1,
+                        categoryId: 0
+                    });
+                }
 
                 Swal.fire({
                     title: "¡Éxito!",
-                    text: "Registro guardado",
+                    text: trainingNeedId ? "Registro actualizado" : "Registro guardado",
                     icon: "success",
                     confirmButtonText: "Aceptar"
                 });
 
                 onSuccess?.();
-
             } else {
                 Swal.fire({
-                    title: "Error al registrar",
-                    text: response.message || "No se puede guardar. Intente nuevamente",
+                    title: "Error",
+                    text: response.message || "No se pudo completar la operación. Intente nuevamente",
                     icon: "error"
                 });
             }
@@ -151,7 +192,7 @@ export const FormTrainingNeeds = ({ onSuccess }: Props) => {
                     icon: "warning",
                     confirmButtonText: "Ir a login"
                 }).then(() => {
-                    window.location.href = '/login';
+                    navigate("/login");
                 });
             } else {
                 Swal.fire({
@@ -161,7 +202,7 @@ export const FormTrainingNeeds = ({ onSuccess }: Props) => {
                 });
             }
 
-            console.error("Error al crear el registro", error);
+            console.error("Error al procesar el formulario", error);
         }
     };
 
@@ -241,6 +282,7 @@ export const FormTrainingNeeds = ({ onSuccess }: Props) => {
                     label="Prioridad"
                     name="priorityId"
                     options={priorityOptions}
+                    value={formData.priorityId}
                     onChange={handleChange}
                 />
 
@@ -249,6 +291,7 @@ export const FormTrainingNeeds = ({ onSuccess }: Props) => {
                     label="Selecciona una categoría"
                     name="categoryId"
                     options={categoryOptions}
+                    value={formData.categoryId}
                     onChange={handleChange}
                 />
 
@@ -259,6 +302,26 @@ export const FormTrainingNeeds = ({ onSuccess }: Props) => {
                     value={formData.providerUser}
                     onChange={handleChange}
                 />
+
+                {trainingNeedId && (
+                    <>
+                        <FormInput
+                            type="text"
+                            label="Proveedor Admin 1"
+                            name="providerAdmin1"
+                            value={formData.providerAdmin1}
+                            onChange={handleChange}
+                        />
+
+                        <FormInput
+                            type="text"
+                            label="Proveedor Admin 2"
+                            name="providerAdmin2"
+                            value={formData.providerAdmin2}
+                            onChange={handleChange}
+                        />
+                    </>
+                )}
 
                 <div className="pt-4 flex justify-end space-x-3">
                     <Button type="submit" variant="secondary" size="sm">

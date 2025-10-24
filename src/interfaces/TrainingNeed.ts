@@ -10,4 +10,8 @@ export interface TrainingNeed {
     priority: number;
     category: number;
     providerUser: string;
+    providerAdmin1: string;
+    providerAdmin2: string;
+    priorityId: number;
+    categoryId: number;
 }

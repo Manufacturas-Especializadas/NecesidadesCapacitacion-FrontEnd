@@ -16,10 +16,12 @@ export const API_CONFIG = {
         training: {
             prioritys: "/api/TrainingNeed/GetPriority",
             categorys: "/api/TrainingNeed/GetCategory",
+            getTrainingNeedById: "/api/TrainingNeed/GetTrainingNeedsById/",
             trainingNeeds: "/api/TrainingNeed/GetTrainingNeeds",
             trainingNeedsByUser: "/api/TrainingNeed/GetTrainingNeedsByUser",
             downloadExcel: "/api/TrainingNeed/DownloadExcel",
             create: "/api/TrainingNeed/Create",
+            update: "/api/TrainingNeed/Update/",
             delete: "/api/TrainingNeed/Delete/"
         }
     }

@@ -3,7 +3,10 @@ import type { UserTrainingSummary } from "../../interfaces/UserTrainingSummary";
 import { Button } from "../Button/Button";
 import { Table } from "../Table/Table";
 import { Avatar } from "../Avatar/Avatar";
-import { BiX } from "react-icons/bi";
+import { BiX, BiPencil } from "react-icons/bi";
+import { useState } from "react";
+import { OffCanvas } from "../OffCanvas/OffCanvas";
+import { FormTrainingNeeds } from "../FormTrainingNeeds/FormTrainingNeeds";
 
 const PriorityBadge = ({ priority }: { priority: string }) => {
     let classes = "";
@@ -27,7 +30,6 @@ const PriorityBadge = ({ priority }: { priority: string }) => {
     );
 };
 
-
 const modalColumns = [
     {
         name: "Necesidad actual",
@@ -41,7 +43,7 @@ const modalColumns = [
     },
     {
         name: "Prioridad",
-        cell: (row: TrainingNeedDetails) => <PriorityBadge priority={row.priorirty} />,
+        cell: (row: TrainingNeedDetails) => <PriorityBadge priority={row.priorirty} />, // 👈 typo intencional (usa tu campo actual)
     },
     {
         name: "Fecha",
@@ -53,22 +55,62 @@ const modalColumns = [
             }),
         width: "180px",
     },
+    {
+        name: "Acciones",
+        cell: (row: TrainingNeedDetails) => (
+            <button
+                onClick={(e) => {
+                    e.stopPropagation();
+                    handleEditFromColumn(row);
+                }}
+                className="p-2 text-orange-600 hover:bg-orange-100 rounded-md transition-colors"
+                title="Editar"
+                aria-label={`Editar necesidad ${row.id}`}
+            >
+                <BiPencil className="w-4 h-4" />
+            </button>
+        ),
+        ignoreRowClick: true,
+        width: "100px",
+        center: true,
+    },
 ];
-
 
 interface Props {
     user: UserTrainingSummary | null;
     isOpen: boolean;
     onClose: () => void;
-};
+}
+
+let handleEditFromColumn: (need: TrainingNeedDetails) => void = () => { };
 
 export const UserTrainingDetailsModal = ({ user, isOpen, onClose }: Props) => {
+    const [editingId, setEditingId] = useState<number | null>(null);
+    const [isOffCanvasOpen, setIsOffCanvasOpen] = useState(false);
+
+    const handleEdit = (need: TrainingNeedDetails) => {
+        setEditingId(need.id);
+        setIsOffCanvasOpen(true);
+    };
+
+    handleEditFromColumn = handleEdit;
+
+    const handleCloseOffCanvas = () => {
+        setIsOffCanvasOpen(false);
+        setEditingId(null);
+    };
+
+    const handleSuccess = () => {
+        handleCloseOffCanvas();
+    };
+
     if (!isOpen || !user) return null;
 
     return (
         <>
             <div
-                className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+                className={`fixed inset-0 z-50 flex items-center justify-center p-4 transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"
+                    }`}
             >
                 <div
                     className="absolute inset-0 bg-black/60 backdrop-blur-sm"
@@ -132,6 +174,19 @@ export const UserTrainingDetailsModal = ({ user, isOpen, onClose }: Props) => {
                     </div>
                 </div>
             </div>
+
+            <OffCanvas
+                title="Editar necesidad"
+                isOpen={isOffCanvasOpen}
+                onClose={handleCloseOffCanvas}
+            >
+                {editingId !== null && (
+                    <FormTrainingNeeds
+                        trainingNeedId={editingId}
+                        onSuccess={handleSuccess}
+                    />
+                )}
+            </OffCanvas>
         </>
     );
 };

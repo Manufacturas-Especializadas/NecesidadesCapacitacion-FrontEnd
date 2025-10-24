@@ -12,12 +12,12 @@ export interface TrainingNeedFormData {
     qualityObjective: string;
     currentPerformance: string;
     providerUser: string,
-    providerAdmin1: string;
-    providerAdmin2: string;
+    providerAdmin1?: string;
+    providerAdmin2?: string;
     expectedPerformance: string;
     registrationDate: string
     priorityId: number;
-    categoryId: number
+    categoryId: number;
 };
 
 export interface TrainigNeedResponse {
@@ -31,9 +31,11 @@ class TrainingNeedService {
     private priorityEndpoint = API_CONFIG.endpoints.training.prioritys;
     private categoryEndpoint = API_CONFIG.endpoints.training.categorys;
     private trainingNeedsEndpoint = API_CONFIG.endpoints.training.trainingNeeds;
+    private getTrainingNeedsByIdEndpoint = API_CONFIG.endpoints.training.getTrainingNeedById;
     private trainingNeedsByUser = API_CONFIG.endpoints.training.trainingNeedsByUser;
     private downloadExcelEndpoint = API_CONFIG.endpoints.training.downloadExcel;
     private createEndpoint = API_CONFIG.endpoints.training.create;
+    private updateEndpoint = API_CONFIG.endpoints.training.update;
     private deleteEndpoint = API_CONFIG.endpoints.training.delete;
 
     async getPriority(): Promise<Prioritys[]> {
@@ -46,6 +48,17 @@ class TrainingNeedService {
 
     async getTrainingNeedsByUser(): Promise<UserTrainingSummary[]> {
         return apiClient.get<UserTrainingSummary[]>(this.trainingNeedsByUser);
+    };
+
+    async getTrainingNeedsById(id: number | string): Promise<TrainingNeed | null> {
+        const url = `${this.getTrainingNeedsByIdEndpoint}${id}`;
+        try {
+            const response = await apiClient.get<TrainingNeed>(url);
+            return response;
+        } catch (error) {
+            console.error("Error fetching trainingNeeds by id: ", error);
+            return null
+        }
     };
 
     async getTrainingNeeds(): Promise<TrainingNeed[]> {
@@ -63,6 +76,15 @@ class TrainingNeedService {
     async createTrainingNeed(formData: TrainingNeedFormData): Promise<TrainigNeedResponse> {
         const response = await apiClient.post<TrainigNeedResponse>(
             this.createEndpoint,
+            formData
+        );
+
+        return response;
+    };
+
+    async updateTrainingNeed(id: number, formData: TrainingNeedFormData): Promise<TrainigNeedResponse> {
+        const response = await apiClient.put<TrainigNeedResponse>(
+            `${this.updateEndpoint}${id}`,
             formData
         );
 
