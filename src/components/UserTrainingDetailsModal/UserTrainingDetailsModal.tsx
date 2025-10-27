@@ -63,7 +63,7 @@ const modalColumns = [
                     e.stopPropagation();
                     handleEditFromColumn(row);
                 }}
-                className="p-2 text-orange-600 hover:bg-orange-100 rounded-md transition-colors"
+                className="p-2 text-orange-600 hover:bg-orange-100 rounded-md transition-colors hover:cursor-pointer"
                 title="Editar"
                 aria-label={`Editar necesidad ${row.id}`}
             >
@@ -133,7 +133,8 @@ export const UserTrainingDetailsModal = ({ user, isOpen, onClose }: Props) => {
                         </div>
                         <button
                             onClick={onClose}
-                            className="p-1 rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                            className="p-1 rounded-full text-gray-400 hover:bg-gray-100 hover:text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500
+                            hover:cursor-pointer"
                             aria-label="Cerrar modal"
                         >
                             <BiX className="w-6 h-6" />
