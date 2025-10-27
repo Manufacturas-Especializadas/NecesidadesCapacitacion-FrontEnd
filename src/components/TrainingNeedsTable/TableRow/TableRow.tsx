@@ -13,6 +13,7 @@ interface Props {
         priority: number;
         category: number;
         providerUser: string;
+        statusId: number;
     };
 };
 
@@ -26,13 +27,13 @@ export const TableRow = ({ item }: Props) => {
                 <td className="px-4 py-3 text-sm text-gray-600 max-w-xs break-words">
                     {item.positionsOrCollaborator}
                 </td>
-                <td className="px-4 py-3 text-sm font-semibold text-blue-600 max-w-xs break-words">
+                <td className="px-4 py-3 text-sm font-semibold text-gray-600 max-w-xs break-words">
                     {item.suggestedTrainingCourse}
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-700 max-w-xs break-words">
                     {item.qualityObjective}
                 </td>
-                <td className="px-4 py-3 text-sm text-green-700 font-semibold max-w-xs break-words">
+                <td className="px-4 py-3 text-sm text-gray-700 font-semibold max-w-xs break-words">
                     {item.currentPerformance}
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-700 max-w-xs break-words">
@@ -46,6 +47,9 @@ export const TableRow = ({ item }: Props) => {
                 </td>
                 <td className="px-4 py-3 text-sm text-gray-700 max-w-xs break-words">
                     {item.providerUser}
+                </td>
+                <td className="px-4 py-3 text-sm text-gray-700 max-w-xs break-words">
+                    {item.status}
                 </td>
             </tr>
         </>

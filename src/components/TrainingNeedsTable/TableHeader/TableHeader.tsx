@@ -53,6 +53,13 @@ export const TableHeader = () => {
                     >
                         Sugerencia de proveedor
                     </th>
+
+                    <th
+                        scope="col"
+                        className="px-4 py-3 text-xs md:text-sm font-semibold text-left tracking-wide"
+                    >
+                        Estatus
+                    </th>
                 </tr>
             </thead>
         </>

@@ -39,7 +39,7 @@ export const TrainingNeedsTable = ({ reloadTrigger }: Props) => {
                 {
                     loading ? (
                         <div className="py-12 text-center text-gray-500 animate-pulse">
-                            Cargando dato...
+                            Cargando datos...
                         </div>
                     ) : (
                         <div className="overflow-x-auto">
