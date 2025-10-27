@@ -27,7 +27,7 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
         providerAdmin1: '',
         providerAdmin2: '',
         registrationDate: new Date().toISOString().split('T')[0],
-        priorityId: 1,
+        priorityId: 0,
         categoryId: 0,
         statusId: 3
     });
