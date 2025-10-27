@@ -7,6 +7,7 @@ import Swal from "sweetalert2";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import type { Category } from "../../interfaces/Category";
+import type { Status } from "../../interfaces/Status";
 
 interface Props {
     onSuccess?: () => void;
@@ -28,9 +29,11 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
         registrationDate: new Date().toISOString().split('T')[0],
         priorityId: 1,
         categoryId: 0,
+        statusId: 3
     });
     const [priority, setPriority] = useState<Prioritys[]>([]);
     const [category, setCategory] = useState<Category[]>([]);
+    const [status, setStatus] = useState<Status[]>([]);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -53,6 +56,7 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
                             : new Date().toISOString().split('T')[0],
                         priorityId: data?.priorityId || 1,
                         categoryId: data?.categoryId || 0,
+                        statusId: data?.statusId || 0
                     });
                 } catch (error: any) {
                     console.error("Error al cargar la necesidad de capacitación", error);
@@ -87,6 +91,18 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
         loadCategory();
     }, []);
 
+    useEffect(() => {
+        const loadStatus = async () => {
+            try {
+                const data = await trainingNeedService.getStatus();
+                setStatus(data);
+            } catch (error: any) {
+                console.error();
+            }
+        }
+        loadStatus();
+    }, []);
+
     const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
         const { name, value } = e.target;
 
@@ -114,7 +130,8 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
             !formData.presentNeed ||
             !formData.qualityObjective ||
             !formData.suggestedTrainingCourse ||
-            formData.priorityId === null
+            formData.priorityId === null ||
+            formData.categoryId === null
         ) {
             Swal.fire({
                 title: "Error",
@@ -143,7 +160,7 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
             if (trainingNeedId) {
                 response = await trainingNeedService.updateTrainingNeed(trainingNeedId, formData);
             } else {
-                const { providerAdmin1, providerAdmin2, ...dataForCreation } = formData;
+                const { providerAdmin1, providerAdmin2, statusId, ...dataForCreation } = formData;
                 response = await trainingNeedService.createTrainingNeed(dataForCreation);
             }
 
@@ -163,7 +180,8 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
                         providerAdmin2: '',
                         registrationDate: new Date().toISOString().split('T')[0],
                         priorityId: 1,
-                        categoryId: 0
+                        categoryId: 0,
+                        statusId: 0
                     });
                 }
 
@@ -214,6 +232,11 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
     const categoryOptions = category.map((category) => ({
         value: category.id.toString(),
         label: category.name
+    }));
+
+    const statusOptions = status.map((status) => ({
+        value: status.id.toString(),
+        label: status.name
     }));
 
     return (
@@ -318,6 +341,15 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
                             label="Proveedor Admin 2"
                             name="providerAdmin2"
                             value={formData.providerAdmin2}
+                            onChange={handleChange}
+                        />
+
+                        <FormInput
+                            type="select"
+                            label="Estatus"
+                            name="statusId"
+                            value={formData.statusId}
+                            options={statusOptions}
                             onChange={handleChange}
                         />
                     </>
