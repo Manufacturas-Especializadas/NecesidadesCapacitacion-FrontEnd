@@ -258,6 +258,7 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
                     type="textarea"
                     value={formData.presentNeed}
                     onChange={handleChange}
+                    required
                 />
 
                 <FormInput
@@ -266,6 +267,7 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
                     type="textarea"
                     value={formData.positionsOrCollaborator}
                     onChange={handleChange}
+                    required
                 />
 
                 <FormInput
@@ -274,6 +276,7 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
                     type="text"
                     value={formData.suggestedTrainingCourse}
                     onChange={handleChange}
+                    required
                 />
 
                 <FormInput
@@ -282,6 +285,7 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
                     type="text"
                     value={formData.qualityObjective}
                     onChange={handleChange}
+                    required
                 />
 
                 <FormInput
@@ -290,6 +294,7 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
                     type="text"
                     value={formData.currentPerformance}
                     onChange={handleChange}
+                    required
                 />
 
                 <FormInput
@@ -298,6 +303,7 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
                     type="text"
                     value={formData.expectedPerformance}
                     onChange={handleChange}
+                    required
                 />
 
                 <FormInput
@@ -307,6 +313,7 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
                     options={priorityOptions}
                     value={formData.priorityId}
                     onChange={handleChange}
+                    required
                 />
 
                 <FormInput
@@ -316,6 +323,7 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
                     options={categoryOptions}
                     value={formData.categoryId}
                     onChange={handleChange}
+                    required
                 />
 
                 <FormInput
@@ -324,6 +332,7 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
                     name="providerUser"
                     value={formData.providerUser}
                     onChange={handleChange}
+                    required
                 />
 
                 {trainingNeedId && (
