@@ -15,4 +15,5 @@ export interface TrainingNeed {
     priorityId: number;
     categoryId: number;
     statusId: number;
+    status: number;
 }

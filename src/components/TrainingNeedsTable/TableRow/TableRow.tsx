@@ -13,7 +13,7 @@ interface Props {
         priority: number;
         category: number;
         providerUser: string;
-        statusId: number;
+        status: number;
     };
 };
 
