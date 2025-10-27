@@ -46,6 +46,10 @@ const modalColumns = [
         cell: (row: TrainingNeedDetails) => <PriorityBadge priority={row.priorirty} />, // 👈 typo intencional (usa tu campo actual)
     },
     {
+        name: "Estatus",
+        cell: (row: TrainingNeedDetails) => row.status
+    },
+    {
         name: "Fecha",
         selector: (row: TrainingNeedDetails) =>
             new Date(row.registrationDate).toLocaleDateString("es-ES", {

@@ -3,5 +3,6 @@ export interface TrainingNeedDetails {
     presentNeed: string;
     suggestedTrainingCourse: string;
     priorirty: string;
+    status: string;
     registrationDate: string;
 }
