@@ -14,4 +14,5 @@ export interface TrainingNeed {
     providerAdmin2: string;
     priorityId: number;
     categoryId: number;
+    statusId: number;
 }
