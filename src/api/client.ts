@@ -94,8 +94,9 @@ class ApiClient {
         if (!response.ok) {
             const errorData = await response.json().catch(() => ({
                 message: `Error HTTP: ${response.status}`,
+                details: ""
             }));
-            throw new Error(errorData.message || `Error HTTP: ${response.status}`);
+            throw new Error(`${errorData.message} - Detalles: ${errorData.details}`);
         }
 
         if (response.status === 204 || response.headers.get("content-length") === "0") {
