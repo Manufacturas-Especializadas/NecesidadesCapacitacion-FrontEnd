@@ -1,6 +1,7 @@
 import { API_CONFIG } from "../../config/api";
 import type { Category } from "../../interfaces/Category";
 import type { Prioritys } from "../../interfaces/Prioritys";
+import type { Status } from "../../interfaces/Status";
 import type { TrainingNeed } from "../../interfaces/TrainingNeed";
 import type { UserTrainingSummary } from "../../interfaces/UserTrainingSummary";
 import { apiClient } from "../client";
@@ -18,6 +19,7 @@ export interface TrainingNeedFormData {
     registrationDate: string
     priorityId: number;
     categoryId: number;
+    statusId?: number;
 };
 
 export interface TrainigNeedResponse {
@@ -29,6 +31,7 @@ export interface TrainigNeedResponse {
 
 class TrainingNeedService {
     private priorityEndpoint = API_CONFIG.endpoints.training.prioritys;
+    private statusEndpoint = API_CONFIG.endpoints.training.status;
     private categoryEndpoint = API_CONFIG.endpoints.training.categorys;
     private trainingNeedsEndpoint = API_CONFIG.endpoints.training.trainingNeeds;
     private getTrainingNeedsByIdEndpoint = API_CONFIG.endpoints.training.getTrainingNeedById;
@@ -44,6 +47,10 @@ class TrainingNeedService {
 
     async getCategory(): Promise<Category[]> {
         return apiClient.get<Category[]>(this.categoryEndpoint);
+    };
+
+    async getStatus(): Promise<Status[]> {
+        return apiClient.get<Status[]>(this.statusEndpoint);
     };
 
     async getTrainingNeedsByUser(): Promise<UserTrainingSummary[]> {
