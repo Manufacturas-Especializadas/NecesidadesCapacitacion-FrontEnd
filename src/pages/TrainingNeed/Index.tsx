@@ -6,6 +6,7 @@ import { BiCog, BiPlus } from "react-icons/bi";
 import { TrainingNeedsTable } from "../../components/TrainingNeedsTable/TrainingNeedsTable";
 import { useNavigate } from "react-router-dom";
 import { RoleGuard } from "../../components/RoleGuard/RoleGuard";
+import fraseCapacitacion from "../../assets/Nelsonmandela.png";
 
 export const Index = () => {
     const [isOffCanvasOpen, setIsOffCanvas] = useState(false);
@@ -24,6 +25,13 @@ export const Index = () => {
         <>
             <div className="min-h-screen bg-gray-100/50">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                    <div className="w-full border-t border-gray-200 mb-4">
+                        <img
+                            src={fraseCapacitacion}
+                            alt="La educación es el arma más poderosa que puedes usar para cambiar al mundo - Nelson Mandela"
+                            className="w-full h-auto object-contain"
+                        />
+                    </div>
                     <div className="mb-8 p-5 bg-white rounded-xl shadow-sm border border-gray-200 flex flex-col
                         md:flex-row md:items-center md:justify-between gap-4">
                         <div>
@@ -58,6 +66,7 @@ export const Index = () => {
                             </Button>
                         </div>
                     </div>
+
 
                     <div className="w-full">
                         <TrainingNeedsTable reloadTrigger={tableKey} />
