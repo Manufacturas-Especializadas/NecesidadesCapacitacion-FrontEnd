@@ -262,7 +262,7 @@ export const FormTrainingNeeds = ({ onSuccess, trainingNeedId }: Props) => {
                 />
 
                 <FormInput
-                    label="Puestos y/o Colaborador a incluir en el entrenamiento"
+                    label="Nombre y puesto del colaborador a incluir en el entrenamiento"
                     name="positionsOrCollaborator"
                     type="textarea"
                     value={formData.positionsOrCollaborator}

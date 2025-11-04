@@ -10,7 +10,7 @@ export const TableHeader = () => {
                         Necesidad presente
                     </th>
                     <th scope="col" className="px-4 py-3 text-xs md:text-sm font-semibold text-left tracking-wide">
-                        Nombres y puesto del colaborador a incluir
+                        Nombre y puesto del colaborador a incluir
                     </th>
                     <th scope="col" className="px-4 py-3 text-xs md:text-sm font-semibold text-left tracking-wide">
                         Curso / Entrenamiento sugerido
