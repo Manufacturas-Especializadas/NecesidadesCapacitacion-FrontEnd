@@ -13,7 +13,7 @@ export const TableHeader = () => {
                         Nombres y puestos del colaboraador a incluir
                     </th>
                     <th scope="col" className="px-4 py-3 text-xs md:text-sm font-semibold text-left tracking-wide">
-                        Curso / Entrenamieneto sugerido
+                        Curso / Entrenamiento sugerido
                     </th>
                     <th
                         scope="col"
