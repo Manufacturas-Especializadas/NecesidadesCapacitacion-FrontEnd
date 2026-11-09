@@ -130,7 +130,12 @@ export const IndexAdmin = () => {
 
         return (
             <>
-                <div className="p-4 sm:p-5 flex justify-end border-b border-gray-200">
+                <div className="p-4 sm:p-5 flex flex-wrap justify-end gap-2 border-b border-gray-200">
+                    {user?.role === "Admin" && (
+                        <Button variant="secondary" size="sm" onClick={() => navigate("/register")}>
+                            Registrar usuario
+                        </Button>
+                    )}
                     <Button
                         variant="secondary"
                         size="sm"
@@ -175,11 +180,6 @@ export const IndexAdmin = () => {
                                 Revisa las solicitudes de capacitación de cada usuario.
                             </p>
                         </div>
-                        {user?.role === "Admin" && (
-                            <Button variant="secondary" size="sm" onClick={() => navigate("/register")}>
-                                Registrar usuario
-                            </Button>
-                        )}
                     </header>
 
                     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
