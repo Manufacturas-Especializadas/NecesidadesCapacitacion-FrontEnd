@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 import { Button } from "../../components/Button/Button";
 import type { UserTrainingSummary } from "../../interfaces/UserTrainingSummary";
 import { UserTrainingDetailsModal } from "../../components/UserTrainingDetailsModal/UserTrainingDetailsModal";
@@ -32,6 +33,7 @@ export const IndexAdmin = () => {
     const [actionLoading, setActionLoading] = useState<number | null>(null);
 
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     const getTrainingNeedsByUser = async () => {
         setLoading(true);
@@ -173,6 +175,11 @@ export const IndexAdmin = () => {
                                 Revisa las solicitudes de capacitación de cada usuario.
                             </p>
                         </div>
+                        {user?.role === "Admin" && (
+                            <Button variant="secondary" size="sm" onClick={() => navigate("/register")}>
+                                Registrar usuario
+                            </Button>
+                        )}
                     </header>
 
                     <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">

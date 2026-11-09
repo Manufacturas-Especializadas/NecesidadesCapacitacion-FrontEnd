@@ -1,4 +1,5 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 import { Index } from "../pages/TrainingNeed/Index";
 import { IndexAdmin } from "../pages/Admin/Index";
 import { Login } from "../pages/Auth/Login";
@@ -7,6 +8,7 @@ import { PublicRoute } from "../components/PublicRoute/PublicRoute";
 import { ProtectedRoute } from "../components/ProtectedRoute/ProtectedRoute";
 
 export const MyRoutes = () => {
+    const { user, loading } = useAuth();
     return (
         <>
             <Routes>
@@ -20,13 +22,12 @@ export const MyRoutes = () => {
                 >
                 </Route>
 
+                <Route path="/register" element={loading ? null : user?.role === "Admin" ? <Register /> : <Navigate to="/" replace />} />
+
                 <Route element={<ProtectedRoute />}>
 
                     {/* Admin */}
                     <Route path="/administrador" element={<IndexAdmin />} />
-
-                    {/* Auth */}
-                    <Route path="/register" element={<Register />} />
 
                     {/* Training Needs */}
                     <Route path="/" element={<Index />} />
