@@ -6,7 +6,7 @@ export interface TrainingNeed {
     qualityObjective: string;
     currentPerformance: string;
     expectedPerformance: string;
-    registrationDate: string
+    registrationDate: string | null;
     priority: number;
     category: number;
     providerUser: string;

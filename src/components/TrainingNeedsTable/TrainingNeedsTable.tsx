@@ -52,7 +52,7 @@ export const TrainingNeedsTable = ({ reloadTrigger }: Props) => {
                                         ) : (
                                             <tr>
                                                 <td
-                                                    colSpan={6}
+                                                    colSpan={11}
                                                     className="py-8 text-center text-gray-400 italic"
                                                 >
                                                     No hay registros disponibles
